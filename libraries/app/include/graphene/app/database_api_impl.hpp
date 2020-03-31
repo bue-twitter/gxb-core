@@ -128,6 +128,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       uint64_t get_account_count() const;
       uint64_t get_staking_count() const;
       uint64_t get_asset_count() const;
+      fc::variants get_object_counts(const vector<object_id_type> &ids) const;
       bool is_account_registered(string name) const;
 
 

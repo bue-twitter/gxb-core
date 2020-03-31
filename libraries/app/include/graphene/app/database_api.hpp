@@ -309,6 +309,8 @@ class database_api
 
       uint64_t get_staking_count() const;
 
+      fc::variants get_object_counts(const vector<object_id_type> &ids) const;
+
       /**
       * @brief get_data_transaction_product_costs
       * @param start
@@ -801,6 +803,7 @@ FC_API(graphene::app::database_api,
    (get_account_count)
    (get_asset_count)
    (get_staking_count)
+   (get_object_counts)
    (is_account_registered)
 
    (create_snapshot)

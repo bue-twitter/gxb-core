@@ -899,6 +899,23 @@ uint64_t database_api_impl::get_asset_count() const
    return _db.get_index_type<asset_index>().indices().size();
 }
 
+fc::variants database_api_impl::get_object_counts(const vector<object_id_type> &ids) const
+{  
+    fc::variants vresult;
+    vresult.reserve(ids.size());
+    for (auto id : ids)
+    {
+        std::pair<std::string ,uint32_t> result;
+        fc::variant tmp;
+        std::string idstring = std::to_string(id.space())+"."+std::to_string(id.type())+".x";
+        result.first = idstring;
+        result.second = _db.get_index(id.space(),id.type()).get_next_id().instance();
+        fc::to_variant(result ,tmp,GRAPHENE_MAX_NESTED_OBJECTS);
+        vresult.emplace_back(tmp);
+    }
+    return vresult;
+}
+
 vector<asset> database_api_impl::get_account_balances(account_id_type acnt, const flat_set<asset_id_type>& assets)const
 {
    vector<asset> result;
