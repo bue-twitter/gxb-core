@@ -2037,7 +2037,7 @@ class wallet_api
       /** set the dividend ratio.
       */
       signed_transaction witness_set_commission(string witness_name,
-                                        uint32_t commission_rate,
+                                        double commission_rate,
                                         string fee_asset_symbol,
                                         bool broadcast = false);
       /** remove the witness banned.

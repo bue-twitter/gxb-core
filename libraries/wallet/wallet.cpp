@@ -3539,7 +3539,7 @@
        }
        signed_transaction witness_set_commission(
           string witness_name,
-          uint32_t commission_rate,
+          double commission_rate,
           string fee_asset_symbol,
           bool broadcast
         )
@@ -3552,7 +3552,8 @@
           witness_set_commission_operation witness_set_commission_op;
           witness_set_commission_op.witness = witness.id;
           witness_set_commission_op.witness_account = witness_account.id;
-          witness_set_commission_op.commission_rate = commission_rate;
+          uint32_t commission_rate_transfer = commission_rate * 10;
+          witness_set_commission_op.commission_rate = commission_rate_transfer;
 
           signed_transaction tx;
           tx.operations.push_back( witness_set_commission_op );
@@ -5255,7 +5256,7 @@
     }
     signed_transaction wallet_api::witness_set_commission(
           string witness_name,
-          uint32_t commission_rate,
+          double commission_rate,
           string fee_asset_symbol,
           bool broadcast
         )
