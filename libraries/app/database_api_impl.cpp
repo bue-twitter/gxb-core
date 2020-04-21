@@ -947,12 +947,169 @@ fc::variants database_api_impl::get_object_counts(const vector<object_id_type> &
     vresult.reserve(ids.size());
     for (auto id : ids)
     {
-        std::pair<std::string ,uint32_t> result;
         fc::variant tmp;
-        std::string idstring = std::to_string(id.space())+"."+std::to_string(id.type())+".x";
-        result.first = idstring;
-        result.second = _db.get_index(id.space(),id.type()).get_next_id().instance();
-        fc::to_variant(result ,tmp,GRAPHENE_MAX_NESTED_OBJECTS);
+        uint64_t object_number = 0;
+        auto result = _db.get_index(id.space(),id.type()).get_next_id().instance();
+        if(result){
+            object_number = uint64_t(result);
+        }
+        if(id.space() == protocol_ids)
+        {
+            switch( (object_type)id.type() )
+            {
+                 case account_object_type:{
+                    object_number = _db.get_index_type<account_index>().indices().size();//2
+                    break;
+                 }
+                 case asset_object_type:{
+                     object_number = _db.get_index_type<asset_index>().indices().size();//3
+                    break;
+                 }
+                 case force_settlement_object_type:{
+                     object_number = _db.get_index_type<force_settlement_index>().indices().size();//4
+                    break;
+                 }
+                 case committee_member_object_type:{
+                     object_number = _db.get_index_type<committee_member_index>().indices().size();//5
+                    break;
+                 }
+                 case witness_object_type:{
+                     object_number = _db.get_index_type<witness_index>().indices().size();//6
+                    break;
+                 }
+                 case limit_order_object_type:{
+                     object_number = _db.get_index_type<limit_order_index>().indices().size();//7
+                    break;
+                 }
+                 case call_order_object_type:{
+                     object_number = _db.get_index_type<call_order_index>().indices().size();//8
+                    break;
+                 }
+                 case proposal_object_type:{
+                     object_number = _db.get_index_type<proposal_index>().indices().size();//10
+                    break;
+                 }
+                 case operation_history_object_type:{
+                     object_number = _db.get_index_type<operation_history_index>().indices().size();//11
+                    break;
+                 }
+                 case withdraw_permission_object_type:{
+                     object_number = _db.get_index_type<withdraw_permission_index>().indices().size();//12
+                    break;
+                 }
+                 case vesting_balance_object_type:{
+                     object_number = _db.get_index_type<vesting_balance_index>().indices().size();//13
+                    break;
+                 }
+                 case worker_object_type:{
+                     object_number = _db.get_index_type<worker_index>().indices().size();//14
+                    break;
+                 }
+                 case balance_object_type:{
+                     object_number = _db.get_index_type<balance_index>().indices().size();//15
+                    break;
+                 }
+                 case data_market_category_object_type:{
+                     object_number = _db.get_index_type<data_market_category_index>().indices().size();//16
+                    break;
+                 }
+                 case free_data_product_object_type:{
+                     object_number = _db.get_index_type<free_data_product_index>().indices().size();//17
+                    break;
+                 }
+                 case league_data_product_object_type:{
+                     object_number = _db.get_index_type<league_data_product_index>().indices().size();//18
+                    break;
+                 }
+                 case league_object_type:{
+                     object_number = _db.get_index_type<league_index>().indices().size();//19
+                    break;
+                 }
+                 case data_transaction_object_type:{
+                     object_number = _db.get_index_type<data_transaction_index>().indices().size();//20
+                    break;
+                 }
+                 case pocs_object_type:{
+                     object_number = _db.get_index_type<pocs_index>().indices().size();//21
+                    break;
+                 }
+                 case datasource_copyright_object_type:{
+                     object_number = _db.get_index_type<datasource_copyright_index>().indices().size();//22
+                    break;
+                 }
+                 case second_hand_data_object_type:{
+                     object_number = _db.get_index_type<second_hand_data_index>().indices().size();//23
+                    break;
+                 }
+                 case data_transaction_complain_object_type:{
+                     object_number = _db.get_index_type<data_transaction_complain_index>().indices().size();//24
+                    break;
+                 }
+                 case lock_balance_object_type:{
+                     object_number = _db.get_index_type<account_balance_locked_index>().indices().size();//25
+                    break;
+                 }
+                 case trust_node_pledge_object_type:{
+                     object_number = _db.get_index_type<trust_node_pledge_index>().indices().size();//26
+                    break;
+                 }
+                 case staking_object_type:{
+                     object_number = _db.get_index_type<staking_index>().indices().size();//27
+                    break;
+                 }
+            }
+        }
+        else if( id.space() == implementation_ids )
+        {
+            switch( (object_type)id.type() )
+            {
+                case impl_account_balance_object_type:{
+                    object_number = _db.get_index_type<account_balance_index>().indices().size();//5
+                    break;
+                }
+                case impl_transaction_object_type:{
+                    object_number = _db.get_index_type<transaction_index>().indices().size();//7
+                    break;
+                }
+                case impl_account_transaction_history_object_type:{
+                    object_number = _db.get_index_type<account_transaction_history_index>().indices().size();//9
+                    break;
+                }
+                case impl_blinded_balance_object_type:{
+                     object_number = _db.get_index_type<blinded_balance_index>().indices().size();//10
+                    break;
+                }
+                case impl_special_authority_object_type:{
+                     object_number = _db.get_index_type<special_authority_index>().indices().size();//14
+                    break;
+                }
+                case impl_buyback_object_type:{
+                     object_number = _db.get_index_type<buyback_index>().indices().size();//15
+                    break;
+                }
+                case impl_signature_object_type:{
+                     object_number = _db.get_index_type<signature_index>().indices().size();//22
+                    break;
+                }
+                case impl_table_id_object_type:{
+                     object_number = _db.get_index_type<table_id_multi_index>().indices().size();//23
+                    break;
+                }
+                case impl_key_value_object_type:{
+                     object_number = _db.get_index_type<key_value_index>().indices().size();//24
+                    break;
+                }
+                case index64_object_type:{
+                     object_number = _db.get_index_type<index64_index>().indices().size();//25
+                    break;
+                }
+                case impl_trx_entry_history_object_type:{
+                     object_number = _db.get_index_type<trx_entry_index>().indices().size();//30
+                    break;
+                }
+            }
+        }
+        fc::to_variant(object_number,tmp,GRAPHENE_MAX_NESTED_OBJECTS);
         vresult.emplace_back(tmp);
     }
     return vresult;
